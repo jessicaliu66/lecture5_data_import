@@ -120,5 +120,30 @@ pulse_df =
 
 ```
 
+## Base R
+
+DON'T do this:
+
+```{r, eval = FALSE}
+litters_df = 
+  read.csv("data/FAS_litters.csv") 
+# NEVER use this! Use read_csv() instead.
+
+litters_df$Group
+# DONT use $ either.
+```
+
+## Export data
+
+```{r}
+litters_df_clean = 
+  read_csv("data/FAS_litters.csv")
+litters_df_clean = 
+  janitor::clean_names(litters_df_clean)
+
+write_csv(litters_df_clean, "data/litters_clean.csv")
+# write data to the file "data/litters_clean.csv"
+```
+
 
 
