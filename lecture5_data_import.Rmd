@@ -7,3 +7,63 @@ output: github_document
 library(tidyverse)
 ```
 
+Let's import the `FAS_litters.csv` csv.
+
+```{r}
+litters_df = 
+  read_csv("data/FAS_litters.csv")
+
+# convert space " " in the column names to "_"
+# using func ”clean_names()“ from pkg "janitor”
+litters_df =
+  janitor::clean_names(litters_df) 
+
+
+```
+
+absolute path
+
+```{r}
+litters_df_abs = 
+  read_csv("/Users/10507/Desktop/Courses/Data Science I/课程记录/L5/lecture5_data_import/data/FAS_litters.csv")
+
+litters_df_abs = 
+  janitor::clean_names(litters_df_abs) 
+
+```
+
+Import the `FAS_pups.csv` dataset Using both absolute and relative paths.
+
+```{r}
+pups_df =
+  read_csv("data/FAS_pups.csv")
+pups_df =
+  janitor::clean_names(pups_df)
+
+pups_df_abs =
+  read_csv("/Users/10507/Desktop/Courses/Data Science I/课程记录/L5/lecture5_data_import/data/FAS_pups.csv")
+pups_df_abs =
+  janitor::clean_names(pups_df_abs)
+```
+
+## Look at data
+
+```{r}
+litters_df
+
+head(litters_df)
+```
+
+You can use `view`
+
+```{r, eval = FALSE}
+view(litters_df)
+```
+
+Look at a data summary
+
+```{r}
+str(litters_df)
+
+skimr::skim(litters_df)
+```
