@@ -7,3 +7,165 @@ output: github_document
 library(tidyverse)
 ```
 
+```{r}
+litters_df =
+  read_csv("data/FAS_litters.csv")
+litters_df = janitor::clean_names(litters_df)
+
+pups_df =
+  read.csv("data/FAS_pups.csv")
+pups_df = janitor::clean_names(pups_df)
+```
+
+## `select`
+
+`select` is used to select columns!
+(Note: If you does not use `litters_df = select(...)`, the changes will not be saved.)
+
+```{r}
+select(litters_df, group, litter_number, gd0_weight)
+
+select(litters_df, gd0_weight, litter_number)
+
+select(litters_df, group, gd0_weight:gd_of_birth)
+
+select(litters_df, group, starts_with("pups")) 
+#select every column with name that starts with "pups"
+
+select(litters_df, -litter_number) 
+# remove "litter_number", keep everything eles
+
+select(litters_df, -starts_with("gd")) 
+
+select(litters_df, group, litter_id = litter_number) 
+# rename "litter_number" to "litter_id"
+
+select(litters_df, group, litter_id = litter_number, everything())
+# keep everything else I didn't mention as they were
+
+select(litters_df, gd0_weight, everything()) 
+```
+
+```{r}
+rename(litters_df, litter_id = litter_number)
+
+relocate(litters_df, litter_number)
+# start with "litter_number" first
+```
+
+# Learning Assessment: In the pups data, select the columns containing litter number, sex, and PD ears
+
+```{r}
+select(pups_df, litter_number, sex, pd_ears)
+```
+
+`select` vs `pull`
+
+```{r}
+select(litters_df, group)
+# result comes as column
+
+pull(litters_df, group)
+```
+
+
+
+
+## `filter`
+
+get rid of rows using `filter()`
+
+```{r}
+filter(litters_df, group == "Con7")
+# keeps the rows with group == "Con7"
+
+filter(litters_df, group == "Mod8")
+# keeps the rows with group == "Mod8"
+
+filter(litters_df, group != "Con7")
+# keeps the rows with group that's not "Con7"
+
+filter(litters_df, gd0_weight > 20)
+# keeps the rows with gd0_weight > 20
+
+filter(litters_df, gd0_weight <= 20)
+
+filter(litters_df, group == "Con7" | group == "Con8")
+filter(litters_df, group %in% c("Con7","Con8"))
+# Both will keeps the rows with group == "Con7" or "Con8"
+
+filter(litters_df, !(group == "Con7"))
+
+filter(litters_df, group %in% c("Con7","Con8"), gd0_weight > 20)
+
+```
+
+what about missing rows?
+
+```{r drop NA}
+drop_na(litters_df)
+# drop all the rows with any missing value
+
+drop_na(litters_df, gd0_weight)
+# drop the rows with missing value in "gd0_weight"
+```
+
+
+
+## `mutate`
+
+this is used to add or change variables.
+
+```{r}
+mutate(litters_df, wt_gain = gd18_weight - gd0_weight)
+# calculate wt_gain = gd18_weight - gd0_weight, and add "wt_gain" as the last column
+
+mutate(litters_df, group = str_to_lower(group))
+# converts the values of "group" (string) to lower case letters
+
+mutate(
+  litters_df, 
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+)
+```
+
+
+
+## `arrange`
+
+```{r}
+arrange(litters_df, gd0_weight)
+# arrange the rows according to their gd0_weight values
+
+arrange(litters_df, group, gd0_weight)
+# arrange the rows first according to their group,
+# then according to their gd0_weight values
+```
+
+
+## `pipes`
+
+`|>` and `%>%` both exist
+
+```{r}
+litters_df = 
+  read_csv("data/FAS_litters.csv") |> 
+  janitor::clean_names()
+# same as 
+# litters_df = read_csv("data/FAS_litters.csv")
+# litters_df = janitor::clean_names(litters_df)
+
+litters_df = 
+  read_csv("data/FAS_litters.csv") |> 
+  janitor::clean_names() |>
+  select(-starts_with("pups")) |> #remove the columns start with "pups"
+  mutate(
+    group = str_to_lower(group), 
+    wt_gain = gd18_weight - gd0_weight,
+    # calculate wt_gain = gd18_weight - gd0_weight, and add it as the last column
+  ) |>
+  drop_na(wt_gain) |>
+  arrange(group, wt_gain)
+```
+
