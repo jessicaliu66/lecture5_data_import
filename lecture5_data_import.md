@@ -247,6 +247,8 @@ litters_df =
 Import a **xlsx** file first.
 
 ``` r
+library(readxl)
+
 mlb_df = 
   read_excel("data/mlb11.xlsx")
 ```
@@ -254,6 +256,8 @@ mlb_df =
 Import a **SAS** file.
 
 ``` r
+library(haven)
+
 pulse_df = 
   read_sas("data/public_pulse_data.sas7bdat")
 ```

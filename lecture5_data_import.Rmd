@@ -5,8 +5,8 @@ output: github_document
 
 ```{r setup, echo = FALSE, message = FALSE}
 library(tidyverse)
-library(readxl)
-library(haven)
+library(readxl) #For importing xlsx file
+library(haven) #For importing SAS file
 ```
 
 Let's import the `FAS_litters.csv` csv.
@@ -108,6 +108,8 @@ litters_df =
 Import a __xlsx__ file first.
 
 ```{r}
+library(readxl)
+
 mlb_df = 
   read_excel("data/mlb11.xlsx")
 ```
@@ -115,9 +117,10 @@ mlb_df =
 Import a __SAS__ file.
 
 ```{r}
+library(haven)
+
 pulse_df = 
   read_sas("data/public_pulse_data.sas7bdat")
-
 ```
 
 ## Base R
