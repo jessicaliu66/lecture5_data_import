@@ -1,3 +1,20 @@
 Tidy data
 ================
 
+## PULSE data
+
+``` r
+pulse_df =
+  haven::read_sas("data/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |>
+  pivot_longer( #making a long format
+    bdi_score_bl:bdi_score_12m, # the range of columns you want to change to variable values
+    names_to = "visit",
+    values_to = "bdi_score",
+    names_prefix = "bdi_score_" # remove prename "bdi_score_" from all values
+  ) |>
+  mutate(
+    visit = replace(visit, visit == "bl", "00m")
+    # find the "visit" values that are "bl" and replace them with "00m"
+  )
+```
